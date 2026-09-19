@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auth Page</title>
+    <link rel="stylesheet" href="./Style.css" />
+
+    <style>
+      .main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 130px);
+        padding: 20px;
+      }
+
+      .container {
+        width: min(100%, 380px);
+        background: white;
+        padding: 24px;
+        border: 1px solid #e4e8f0;
+        border-radius: 8px;
+        box-shadow: 0 14px 34px rgba(23, 32, 51, 0.12);
+      }
+
+      .tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 22px;
+      }
+
+      .tabs button {
+        flex: 1;
+        padding: 11px;
+        border: none;
+        border-radius: 6px;
+        background: #eef3fb;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .tabs button.active {
+        color: #ffffff;
+        background: #1557c0;
+      }
+
+      .form-box {
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .form-box.active {
+        display: block;
+        opacity: 1;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      input {
+        padding: 12px;
+        border: 1px solid #cfd7e6;
+        border-radius: 6px;
+        font-size: 15px;
+      }
+
+      button.submit {
+        background: #1557c0;
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      button.submit:hover {
+        background: #0f4294;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav>
+      <li><a href="./Home.html">HOME</a></li>
+      <li><a href="./Product.html">Product</a></li>
+      <li><a href="./cart.html">Cart</a></li>
+      <li><a href="./auth.html">Login/Signup</a></li>
+    </nav>
+
+    <div class="main">
+      <div class="container">
+        <div class="tabs">
+          <button id="loginTab" onclick="showLogin()">Login</button>
+          <button id="signupTab" onclick="showSignup()">Signup</button>
+        </div>
+
+        <div class="form-box active" id="loginBox">
+          <form id="loginForm">
+            <input
+              type="text"
+              id="loginUsername"
+              placeholder="Username"
+              required
+            />
+            <input type="password" placeholder="Password" required />
+            <button class="submit">Login</button>
+          </form>
+        </div>
+
+        <div class="form-box" id="signupBox">
+          <form id="signupForm">
+            <input
+              type="text"
+              id="signupUsername"
+              placeholder="Username"
+              required
+            />
+            <input type="email" id="email" placeholder="Email" required />
+            <input
+              type="password"
+              id="password"
+              placeholder="Password"
+              required
+            />
+            <button class="submit">Signup</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let loginBox = document.getElementById("loginBox");
+      let signupBox = document.getElementById("signupBox");
+      let loginTab = document.getElementById("loginTab");
+      let signupTab = document.getElementById("signupTab");
+
+      function showLogin() {
+        loginBox.classList.add("active");
+        signupBox.classList.remove("active");
+        loginTab.classList.add("active");
+        signupTab.classList.remove("active");
+      }
+
+      function showSignup() {
+        signupBox.classList.add("active");
+        loginBox.classList.remove("active");
+        signupTab.classList.add("active");
+        loginTab.classList.remove("active");
+      }
+
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          let username = document.getElementById("loginUsername").value;
+
+          localStorage.setItem("username", username);
+          window.location.href = "Home.html";
+        });
+
+      document
+        .getElementById("signupForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          let username = document.getElementById("signupUsername").value;
+          let email = document.getElementById("email").value;
+
+          localStorage.setItem("username", username);
+          localStorage.setItem("email", email);
+
+          window.location.href = "Home.html";
+        });
+
+      showLogin();
+    </script>
+  </body>
+</html>

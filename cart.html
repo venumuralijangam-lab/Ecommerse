@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cart</title>
+
+    <link rel="stylesheet" href="./Style.css" />
+    <link rel="stylesheet" href="./product.css" />
+
+    <style>
+      section {
+        padding-top: 10px;
+      }
+
+      article {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 22px;
+        justify-content: center;
+      }
+
+      .user-card {
+        min-height: 360px;
+        padding: 10px;
+        text-align: center;
+      }
+
+      .quantity-actions {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .quantity-actions button {
+        width: 40px;
+        height: 38px;
+        font-size: 20px;
+        cursor: pointer;
+      }
+
+      .remove-btn {
+        margin-top: 10px;
+        background: red;
+        color: white;
+        border: none;
+        padding: 6px 10px;
+        cursor: pointer;
+      }
+
+      #total {
+        text-align: center;
+        font-size: 22px;
+        margin: 22px 0 44px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav>
+      <li><a href="./Home.html">HOME</a></li>
+      <li><a href="./Product.html">Product</a></li>
+      <li><a href="./cart.html">Cart</a></li>
+      <li><a href="./auth.html">Login/Signup</a></li>
+    </nav>
+
+    <h1>Your Cart</h1>
+
+    <section>
+      <article></article>
+    </section>
+
+    <h2 id="total"></h2>
+
+    <script>
+      let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+
+      cartItems.forEach((item) => {
+        if (!item.quantity) item.quantity = 1;
+      });
+
+      let article = document.querySelector("article");
+      let totalDisplay = document.getElementById("total");
+
+      function displayCart() {
+        article.innerHTML = "";
+
+        if (cartItems.length === 0) {
+          article.innerHTML = "<h2>Cart is empty</h2>";
+          totalDisplay.innerText = "";
+          return;
+        }
+
+        article.innerHTML = cartItems
+          .map((item, index) => {
+            return `
+          <div class="user-card">
+            <img src="${item.image}" alt="${item.title}" />
+            <h3>${item.title}</h3>
+
+            <p>Price: ₹${item.price}</p>
+            <p>Quantity: ${item.quantity}</p>
+            <h4>Total: ₹${(item.price * item.quantity).toFixed(2)}</h4>
+
+            <div class="quantity-actions">
+              <button onclick="decreaseQty(${index})">-</button>
+              <button onclick="increaseQty(${index})">+</button>
+            </div>
+
+            <button class="remove-btn" onclick="removeItem(${index})">
+              Remove
+            </button>
+          </div>
+        `;
+          })
+          .join("");
+
+        updateTotal();
+      }
+
+      function increaseQty(index) {
+        cartItems[index].quantity++;
+        updateCart();
+      }
+
+      function decreaseQty(index) {
+        if (cartItems[index].quantity > 1) {
+          cartItems[index].quantity--;
+        } else {
+          removeItem(index);
+        }
+        updateCart();
+      }
+
+      function removeItem(index) {
+        cartItems.splice(index, 1);
+        updateCart();
+      }
+
+      function updateCart() {
+        localStorage.setItem("cart", JSON.stringify(cartItems));
+        displayCart();
+      }
+
+      function updateTotal() {
+        let total = cartItems.reduce((sum, item) => {
+          return sum + item.price * item.quantity;
+        }, 0);
+
+        totalDisplay.innerText = "Total Price: ₹" + total.toFixed(2);
+      }
+
+      displayCart();
+    </script>
+  </body>
+</html>
